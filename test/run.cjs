@@ -575,6 +575,51 @@ check('sin conexión → mensaje de red genérico (sin marca)', async () => {
   }
 });
 
+/* ------------------ 11) Esquema Supabase (schema.sql) --------------------- */
+console.log('\n11) Esquema Supabase (schema.sql)');
+const schemaSql = require('fs').readFileSync(require('path').join(__dirname, '..', 'supabase', 'schema.sql'), 'utf8');
+const schemaClean = schemaSql.replace(/--[^\n]*/g, '');
+
+check('el esquema es 100% ASCII (compatible con cualquier codificacion)', () => {
+  const nonAscii = [...schemaSql].filter((c) => c.charCodeAt(0) > 126);
+  if (nonAscii.length) throw new Error(`${nonAscii.length} caracteres no ASCII: ${JSON.stringify(nonAscii.slice(0, 5))}`);
+});
+
+check('CREATE POLICY respeta el orden FOR ... TO (bug de la linea 81)', () => {
+  const m = /create policy[\s\S]*?;/.exec(schemaClean);
+  if (!m) throw new Error('no se encuentra create policy');
+  const block = m[0];
+  const iFor = block.indexOf('for all');
+  const iTo = block.indexOf('to anon, authenticated');
+  if (iFor < 0) throw new Error('la politica no es FOR ALL');
+  if (iTo < 0) throw new Error('la politica no aplica a anon, authenticated');
+  if (iFor > iTo) throw new Error('clausula TO antes de FOR: invalida en PostgreSQL');
+});
+
+check('RLS habilitado, politica idempotente y GRANTs explicitos', () => {
+  if (!/alter table public\.facturas enable row level security/.test(schemaSql)) throw new Error('falta enable row level security');
+  if (!/drop policy if exists/.test(schemaSql)) throw new Error('falta drop policy if exists (idempotencia)');
+  if (!/grant select, insert, update, delete on public\.facturas to anon, authenticated/.test(schemaSql)) throw new Error('faltan GRANTs para anon/authenticated');
+});
+
+check('trimestre como columna GENERADA desde fecha (idempotente)', () => {
+  if (!/add column if not exists trimestre text\s+generated always as \('T' \|\| ceil\(extract\(quarter from fecha\)\)::int::text\) stored/.test(schemaSql)) {
+    throw new Error('falta la columna generada trimestre');
+  }
+});
+
+check('cubre los campos requeridos: emisor, receptor, IVA, IRPF, fecha, estado', () => {
+  ['emisor_nombre', 'emisor_nif', 'receptor_nombre', 'receptor_nif', 'base_imponible', 'porcentaje_iva', 'cuota_iva', 'porcentaje_irpf', 'cuota_irpf', 'total', 'fecha', 'estado'].forEach((col) => {
+    if (!schemaSql.includes(col)) throw new Error(`falta la columna ${col}`);
+  });
+});
+
+check('sin comentarios dentro de sentencias (origen del error de linea 20)', () => {
+  const createBody = /create table if not exists public\.facturas \(([\s\S]*?)\);/.exec(schemaSql);
+  if (!createBody) throw new Error('no se encuentra el create table');
+  if (/--/.test(createBody[1])) throw new Error('queda un comentario -- dentro del CREATE TABLE');
+});
+
 /* ------------------------------- resumen -------------------------------- */
 (async () => {
   await Promise.all(pendingAsync);

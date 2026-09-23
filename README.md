@@ -96,7 +96,7 @@ Presión fiscal (Tn)   = (IVA a liquidar + IRPF estimado) ÷ Ingresos del trimes
 
 ```bash
 npm run qa          # QA estático: ids duplicados, clases Tailwind inválidas, imports sin usar, secretos
-npm test            # 65 comprobaciones: motor fiscal, demo, SSR de páginas, Ajustes sin credenciales, anonimización de marca en la interfaz, Excel (3 hojas), PDF real, validación de archivos, timeout del motor de IA, sin credenciales
+npm test            # 71 comprobaciones: motor fiscal, demo, SSR de páginas, Ajustes sin credenciales, anonimización de marca en la interfaz, Excel (3 hojas), PDF real, validación de archivos, timeout del motor de IA, sin credenciales, esquema Supabase (RLS, orden FOR/TO, ASCII)
 npm run test:e2e    # E2E real: PDF → pdfjs → DeepSeek (requiere DEEPSEEK_KEY en el entorno)
 npm run build       # build de producción
 ```
