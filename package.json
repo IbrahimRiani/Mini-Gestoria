@@ -1,0 +1,34 @@
+{
+  "name": "mini-gestoria",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Mini Gestoría Inteligente B2B — SPA React + Tailwind para autónomos y gestorías: facturación con IA (DeepSeek), libro registro, liquidaciones de IVA/IRPF y exportación Excel/PDF.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node test/build.cjs && node test/run.cjs",
+    "test:e2e": "node test/build.cjs && node test/e2e-ai.cjs",
+    "qa": "node test/qa-check.cjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.0",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.47.0",
+    "pdfjs-dist": "^4.10.38",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-is": "^18.3.1",
+    "recharts": "^3.10.1",
+    "tesseract.js": "^5.1.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.4.3"
+  }
+}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta
+      name="description"
+      content="Mini Gestoría Inteligente B2B — control fiscal, libro de facturas y liquidaciones de IVA/IRPF para autónomos y gestorías."
+    />
+    <title>Mini Gestoría Inteligente · Facturación y Fiscalidad B2B</title>
+    <script>
+      // Aplica el tema antes del primer pintado para evitar parpadeo (FOUC).
+      (function () {
+        try {
+          var stored = localStorage.getItem('mg_theme_v1');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var dark = stored ? stored === 'dark' : prefersDark;
+          document.documentElement.classList.toggle('dark', dark);
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

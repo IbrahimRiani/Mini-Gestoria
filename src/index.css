@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    /* Ritmo espaciado base de 4px — alineación consistente en toda la UI */
+    --mg-bg: 248 250 252;
+  }
+
+  html.dark {
+    color-scheme: dark;
+    --mg-bg: 2 6 23;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-800 antialiased;
+    background-color: rgb(var(--mg-bg) / 1);
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+  }
+
+  .dark body {
+    @apply text-slate-200;
+  }
+
+  /* Jerarquía tipográfica + foco visible y accesible (WCAG 2.4.7) */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-emerald-500/70 ring-offset-2 ring-offset-transparent;
+  }
+
+  ::selection {
+    @apply bg-emerald-500/25;
+  }
+
+  /* Cifras tabulares: columnas de importes alineadas ópticamente */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+}
+
+@layer components {
+  /* Panel de vidrio (backdrop-blur) con borde de 1px y radio suave */
+  .glass-card {
+    @apply rounded-2xl border border-slate-200/80 bg-white/80 shadow-soft backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/70;
+  }
+
+  .glass-panel {
+    @apply rounded-2xl border border-slate-200/70 bg-white/70 backdrop-blur-lg dark:border-white/10 dark:bg-slate-950/50;
+  }
+
+  .section-title {
+    @apply text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400;
+  }
+
+  .input-base {
+    @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 placeholder-slate-400 transition
+           focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/25
+           dark:border-white/10 dark:bg-slate-950/60 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:border-emerald-500/50;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition
+           disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-emerald-600 text-white shadow-[0_10px_24px_-12px_rgba(16,185,129,.9)] hover:bg-emerald-500 active:scale-[.98];
+  }
+
+  .btn-secondary {
+    @apply btn border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 active:scale-[.98]
+           dark:border-white/10 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800;
+  }
+
+  .btn-ghost {
+    @apply btn text-slate-600 hover:bg-slate-100/80 dark:text-slate-300 dark:hover:bg-white/5;
+  }
+}
+
+@layer utilities {
+  .scrollbar-slim::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-slim::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-300/70 dark:bg-slate-700/70;
+  }
+
+  .scrollbar-slim::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
